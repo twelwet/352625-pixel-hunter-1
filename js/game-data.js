@@ -5,7 +5,9 @@ const LEVELS = {
 
 const LIVES = {
   DEFAULT: 3,
-  LAST: 0
+  LAST: 0,
+  EMPTY: `img/heart__empty.svg`,
+  FULL: `img/heart__full.svg`
 };
 
 const POINTS = {
@@ -23,7 +25,12 @@ const TIME = {
 
 const GAME = {
   FAIL: false,
-  OVER: true
+  OVER: true,
+  TITLE: [
+    `Угадайте для каждого изображения фото или рисунок?`,
+    `Угадай, фото или рисунок?`,
+    `Найдите рисунок среди изображений`
+  ]
 };
 
 const ANSWER_TYPES = {
@@ -31,6 +38,56 @@ const ANSWER_TYPES = {
   NORMAL: 1,
   SLOW: 2,
 };
+
+const STATS = {
+  TITLE: {
+    SUCCESS: `Победа!`,
+    FAIL: `Фейл`
+  },
+  PIC: {
+    FAST: `stats__result--fast`,
+    CORRECT: `stats__result--correct`,
+    WRONG: `stats__result--wrong`,
+    SLOW: `stats__result--slow`,
+    UNKNOWN: `stats__result--unknown`
+  }
+};
+
+const INTRO = {
+  PHRASE: ` Это не фото. Это рисунок маслом нидерландского художника-фотореалиста Tjalf Sparnaay.`
+};
+
+const GREETING = {
+  TITLE: `Лучшие художники-фотореалисты бросают тебе вызов!`,
+  RULES: {
+    TITLE: `Правила игры просты:`,
+    PHRASES: [
+      `Нужно отличить рисунок от фотографии и сделать выбор.`,
+      `Задача кажется тривиальной, но не думай, что все так просто.`,
+      `Фотореализм обманчив и коварен.`,
+      `Помни, главное — смотреть очень внимательно.`
+    ]
+  }
+};
+
+const RULES = {
+  TITLE: `Правила`,
+  PHRASES: [
+    `Угадай ${LEVELS.FINISH} раз для каждого изображения фото`,
+    ` или рисунок`,
+    `Фотографиями или рисунками могут быть оба изображения.`,
+    `На каждую попытку отводится ${TIME.FINISH} секунд.`,
+    `Ошибиться можно не более ${LIVES.DEFAULT} раз.`
+  ]
+};
+
+const getRandomValue = (min, max) => Math.floor((Math.random() * (max - min + 1) + min));
+
+const levelsSequence = [];
+
+while (levelsSequence.length < LEVELS.FINISH) {
+  levelsSequence.push(getRandomValue(0, 2));
+}
 
 const scoring = (answers, numberOfLives) => {
   if (!Array.isArray(answers)) {
@@ -112,4 +169,4 @@ const returnTypeOfAnswer = (time) => {
   return answerType;
 };
 
-export {GAME, scoring, manageLives, switchLevel, returnTypeOfAnswer};
+export {GAME, LIVES, POINTS, TIME, STATS, INTRO, GREETING, RULES, levelsSequence, scoring, manageLives, switchLevel, returnTypeOfAnswer};

@@ -4,11 +4,11 @@ const render = (template) => {
   return wrapper;
 };
 
-const mainElement = document.querySelector(`#main`);
+const mainContainer = document.querySelector(`#main`);
 
 const changeScreen = (element) => {
-  mainElement.innerHTML = ``;
-  mainElement.appendChild(element);
+  mainContainer.innerHTML = ``;
+  mainContainer.appendChild(element);
 };
 
-export {render, changeScreen};
+export {mainContainer, render, changeScreen};
