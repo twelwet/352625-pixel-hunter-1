@@ -4,38 +4,27 @@ import {gameHeaderTemplate} from './game-header';
 import {statsBarTemplate} from './stats-bar.js';
 import {greetingScreen} from './greeting.js';
 import {statsScreen} from './stats.js';
+import {game} from './game-data.js';
 
-const gameScreens = [];
+const createScreen = (state) => {
+  const screen = mainContainer.appendChild(render(gameHeaderTemplate(state)));
+  screen.appendChild(render(gameTemplates[state.levels[state.levelNum].getType()]));
+  screen.querySelector(`.game`).appendChild(render(statsBarTemplate(state)));
+  screen.querySelector(`.back`).addEventListener(`click`, () => changeScreen(greetingScreen));
+  return screen;
+};
 
-for (let i = 0; i < gameTemplates.length; i++) {
-  gameScreens[i] = mainContainer.appendChild(render(gameHeaderTemplate));
-  gameScreens[i].appendChild(render(gameTemplates[i]));
-  gameScreens[i].querySelector(`.game`).appendChild(render(statsBarTemplate));
-  gameScreens[i].querySelector(`.back`).addEventListener(`click`, () => changeScreen(greetingScreen));
-}
+const gameScreenOne = createScreen(game);
 
-const levelToggle = [
-  [...gameScreens[0].querySelectorAll(`input`)],
-  [...gameScreens[1].querySelectorAll(`input`)],
-  [...gameScreens[2].querySelectorAll(`.game__option`)]
-];
+const toggles = gameScreenOne.querySelectorAll(`.game__option input`);
 
-levelToggle[0].forEach((element) => {
+toggles.forEach((element) => {
   element.addEventListener(`change`, () => {
-    if ((levelToggle[0][0].checked || levelToggle[0][1].checked) && (levelToggle[0][2].checked || levelToggle[0][3].checked)) { // Упростить сентенцию
-      changeScreen(gameScreens[1]);
+    if ((toggles[0].checked || toggles[1].checked) && (toggles[2].checked || toggles[3].checked)) {
+      game.setLevelNum();
+      changeScreen(createScreen(game));
     }
   });
 });
 
-levelToggle[1].forEach((element) => {
-  element.addEventListener(`change`, () => {
-    if (levelToggle[1][0].checked || levelToggle[1][1].checked) {
-      changeScreen(gameScreens[2]);
-    }
-  });
-});
-
-levelToggle[2].forEach((element) => element.addEventListener(`click`, () => changeScreen(statsScreen)));
-
-export {gameScreens};
+export {gameScreenOne};

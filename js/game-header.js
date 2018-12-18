@@ -1,6 +1,4 @@
-import {TIME, LIVES} from './game-data.js';
-
-const gameHeaderTemplate = `<header class="header">
+const gameHeaderTemplate = (state) => `<header class="header">
   <button class="back">
     <span class="visually-hidden">Вернуться к началу</span>
     <svg class="icon" width="45" height="45" viewBox="0 0 45 45" fill="#000000">
@@ -10,11 +8,14 @@ const gameHeaderTemplate = `<header class="header">
       <use xlink:href="img/sprite.svg#logo-small"></use>
     </svg>
   </button>
-  <div class="game__timer">${TIME.START}</div>
+  <div class="game__timer">${state.time}</div>
   <div class="game__lives">
-    <img src="${LIVES.EMPTY}" class="game__heart" alt=" Missed Life" width="31" height="27">
-    <img src="${LIVES.EMPTY}" class="game__heart" alt="Life" width="31" height="27">
-    <img src="${LIVES.FULL}" class="game__heart" alt="Life" width="31" height="27">
+    ${new Array(3 - state.lives)
+      .fill(`<img src="img/heart__empty.svg" class="game__heart" alt=" Missed Life" width="31" height="27">`)
+      .join(``)}
+    ${new Array(state.lives)
+      .fill(`<img src="img/heart__full.svg" class="game__heart" alt=" Missed Life" width="31" height="27">`)
+      .join(``)}
   </div>
 </header>`;
 

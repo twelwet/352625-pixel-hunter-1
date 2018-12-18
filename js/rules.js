@@ -1,7 +1,7 @@
 import {mainContainer, changeScreen, render} from './util.js';
 import {menuHeaderTemplate} from './menu-header.js';
 import {greetingScreen} from './greeting.js';
-import {gameScreens} from './game.js';
+import {gameScreenOne} from './game.js';
 import {RULES} from './game-data.js';
 
 const rulesTemplate = `<section class="rules">
@@ -36,6 +36,6 @@ rulesInput.addEventListener(`input`, () => {
   rulesButton.disabled = rulesInput.value.trim() === ``;
 });
 
-rulesButton.addEventListener(`click`, () => changeScreen(gameScreens[0]));
+rulesButton.addEventListener(`click`, () => changeScreen(gameScreenOne));
 
 export {rulesScreen};

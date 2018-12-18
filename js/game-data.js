@@ -1,19 +1,16 @@
 const LEVELS = {
-  START: 1,
-  FINISH: 10
+  START: 0,
+  FINISH: 9,
+  TYPE: {
+    TWO_SLIDES: 0,
+    ONE_SLIDE: 1,
+    THREE_SLIDES: 2
+  }
 };
 
 const LIVES = {
   DEFAULT: 3,
   LAST: 0,
-  EMPTY: `img/heart__empty.svg`,
-  FULL: `img/heart__full.svg`
-};
-
-const POINTS = {
-  DEFAULT: 100,
-  EXTRA: 50,
-  SLOW_RESULT: -50
 };
 
 const TIME = {
@@ -21,6 +18,12 @@ const TIME = {
   FINISH: 30,
   FAST: 10,
   SLOW: 20
+};
+
+const POINTS = {
+  DEFAULT: 100,
+  EXTRA: 50,
+  SLOW_RESULT: -50
 };
 
 const GAME = {
@@ -34,9 +37,12 @@ const GAME = {
 };
 
 const ANSWER_TYPES = {
-  FAST: 0,
-  NORMAL: 1,
-  SLOW: 2,
+  CORRECT: {
+    FAST: 0,
+    NORMAL: 1,
+    SLOW: 2
+  },
+  UNCORECT: 3
 };
 
 const STATS = {
@@ -81,13 +87,46 @@ const RULES = {
   ]
 };
 
-const getRandomValue = (min, max) => Math.floor((Math.random() * (max - min + 1) + min));
-
-const levelsSequence = [];
-
-while (levelsSequence.length < LEVELS.FINISH) {
-  levelsSequence.push(getRandomValue(0, 2));
+class Level {
+  constructor(type, answers) {
+    this.type = type;
+    this.answers = answers;
+  }
+  getType() {
+    return this.type;
+  }
+  getTitle() {
+    return GAME.TITLE[this.getType()];
+  }
 }
+
+const levels = [
+  new Level(LEVELS.TYPE.TWO_SLIDES, [`photo`, `photo`]),
+  new Level(LEVELS.TYPE.ONE_SLIDE, [`photo`]),
+  new Level(LEVELS.TYPE.THREE_SLIDES, [null, `photo`, null]),
+  new Level(LEVELS.TYPE.TWO_SLIDES, [`paint`, `paint`]),
+  new Level(LEVELS.TYPE.ONE_SLIDE, [`paint`]),
+  new Level(LEVELS.TYPE.THREE_SLIDES, [`photo`, null, null]),
+  new Level(LEVELS.TYPE.TWO_SLIDES, [`paint`, `photo`]),
+  new Level(LEVELS.TYPE.ONE_SLIDE, [`photo`]),
+  new Level(LEVELS.TYPE.THREE_SLIDES, [null, null, `photo`]),
+  new Level(LEVELS.TYPE.TWO_SLIDES, [`photo`, `paint`])
+];
+
+
+class GameState {
+  constructor(levelNum = LEVELS.START, lives = LIVES.DEFAULT, time = TIME.START) {
+    this.levelNum = levelNum;
+    this.lives = lives;
+    this.time = time;
+    this.levels = levels;
+  }
+  setLevelNum() {
+    this.levelNum = this.levelNum + 1;
+  }
+}
+
+const game = new GameState();
 
 const scoring = (answers, numberOfLives) => {
   if (!Array.isArray(answers)) {
@@ -160,13 +199,13 @@ const returnTypeOfAnswer = (time) => {
   }
   let answerType;
   if (time <= TIME.FAST) {
-    answerType = ANSWER_TYPES.FAST;
+    answerType = ANSWER_TYPES.CORRECT.FAST;
   } else if (time >= TIME.SLOW) {
-    answerType = ANSWER_TYPES.SLOW;
+    answerType = ANSWER_TYPES.CORRECT.SLOW;
   } else {
-    answerType = ANSWER_TYPES.NORMAL;
+    answerType = ANSWER_TYPES.CORRECT.NORMAL;
   }
   return answerType;
 };
 
-export {GAME, LIVES, POINTS, TIME, STATS, INTRO, GREETING, RULES, levelsSequence, scoring, manageLives, switchLevel, returnTypeOfAnswer};
+export {GAME, LIVES, POINTS, TIME, STATS, INTRO, GREETING, RULES, game, levels, scoring, manageLives, switchLevel, returnTypeOfAnswer};
